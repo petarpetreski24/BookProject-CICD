@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Delete Book{% endblock %}
+{% block content %}
+<style>
+    main {
+        padding: 20px;
+        max-width: 800px;
+        margin: auto;
+        background-color: white;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+    }
+
+    h1 {
+        border-bottom: 2px solid #333;
+        padding-bottom: 10px;
+    }
+
+    form button {
+        padding: 10px;
+        background-color: #333;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    form button:hover {
+        background-color: #575757;
+    }
+
+    a.button {
+        display: inline-block;
+        padding: 10px 15px;
+        background-color: #333;
+        color: white;
+        text-decoration: none;
+        margin: 10px 0;
+    }
+
+    a.button:hover {
+        background-color: #575757;
+    }
+</style>
+<h1>Delete Book</h1>
+<p>Are you sure you want to delete "{{ book.title }}"?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Delete</button>
+</form>
+<a href="{% url 'book_list' %}" class="button">Back to Books</a>
+{% endblock %}

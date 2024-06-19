@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Book Details{% endblock %}
+{% block content %}
+<style>
+    main {
+        padding: 20px;
+        max-width: 800px;
+        margin: auto;
+        background-color: white;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+    }
+
+    h1 {
+        border-bottom: 2px solid #333;
+        padding-bottom: 10px;
+    }
+
+    a.button {
+        display: inline-block;
+        padding: 10px 15px;
+        background-color: #333;
+        color: white;
+        text-decoration: none;
+        margin: 10px 0;
+    }
+
+    a.button:hover {
+        background-color: #575757;
+    }
+
+    form button {
+        padding: 10px;
+        background-color: #333;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    form button:hover {
+        background-color: #575757;
+    }
+</style>
+<h1>{{ book.title }}</h1>
+<p>{{ book.description }}</p>
+<p>Author: <a href="{% url 'author_detail' book.author.pk %}">{{ book.author.name }}</a></p>
+<a href="{% url 'book_update' book.pk %}" class="button">Edit</a>
+<form action="{% url 'book_delete' book.pk %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Delete</button>
+</form>
+<a href="{% url 'book_list' %}" class="button">Back to Books</a>
+{% endblock %}
