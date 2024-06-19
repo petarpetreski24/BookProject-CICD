@@ -79,16 +79,10 @@ WSGI_APPLICATION = 'BookProject.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 env = environ.Env()
 environ.Env.read_env()
+DATABASE_URL = os.getenv('DATABASE_URL')
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('DATABASE_NAME'),
-        'USER': env('DATABASE_USER'),
-        'PASSWORD': env('DATABASE_PASSWORD'),
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(default=DATABASE_URL)
 }
 
 
