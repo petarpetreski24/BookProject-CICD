@@ -47,16 +47,20 @@ jobs:
       - name: Notify GitHub on failure
         if: failure()
         run: |
-          curl -H "Authorization: token ${{ secrets.ACCESS_TOKEN }}" \
-               -X POST \
-               -d "{\"body\": \"Build Failed: Please check the GitHub Actions logs for more details.\"}" \
-               https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/comments
+          curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.ACCESS_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/comments \
+            -d '{"body":"Build Failed: Please check the GitHub Actions logs for more details."}'
 
       - name: Notify GitHub on success and run Docker image
         if: success()
         run: |
-          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-               -X POST \
-               -d "{\"body\": \"Build Succeeded: The Docker image has been pushed to DockerHub and is now running.\"}" \
-               https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/comments
+          curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.ACCESS_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/comments \
+            -d '{"body":"Build Succeeded: The Docker image has been pushed to DockerHub and is now running."}'
           docker run -d -p 8000:8000 petarpetreski24/bookproject-cicd:latest
