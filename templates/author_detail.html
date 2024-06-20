@@ -43,11 +43,11 @@
 </style>
 <h1>{{ author.name }}</h1>
 <p>{{ author.bio }}</p>
-<a href="{% url 'author_update' author.pk %}" class="button">Edit</a>
+<a href="{% url 'author_update' author.pk %}" class="button">Edit Author</a>
 <form action="{% url 'author_delete' author.pk %}" method="post">
     {% csrf_token %}
     
-    <button type="submit">Delete</button>
+    <button type="submit">Delete Author</button>
 
 </form>
 <a href="{% url 'author_list' %}" class="button">Back to Authors</a>
