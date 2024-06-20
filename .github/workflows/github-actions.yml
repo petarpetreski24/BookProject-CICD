@@ -1,0 +1,66 @@
+name: BookProject CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.12'
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Lint code
+        run: |
+          pip install flake8
+          flake8 .
+
+      - name: Run tests
+        run: |
+          python manage.py test
+
+      - name: Build Docker image
+        run: |
+          docker build -t petarpetreski24/bookproject-cicd:latest .
+
+      - name: Push Docker image to DockerHub
+        run: |
+          echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+          docker push petarpetreski24/bookproject-cicd:latest
+
+      - name: Notify GitHub on failure
+        if: failure()
+        run: |
+          curl -H "Authorization: token ${{ secrets.ACCESS_TOKEN }}" \
+               -X POST \
+               -d "{\"body\": \"Build Failed: Please check the GitHub Actions logs for more details.\"}" \
+               https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/comments
+
+      - name: Notify GitHub on success
+        if: success()
+        run: |
+          curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+               -X POST \
+               -d "{\"body\": \"Build Succeeded: The Docker image has been pushed to DockerHub.\"}" \
+               https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/comments
