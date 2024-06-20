@@ -46,7 +46,9 @@
 <a href="{% url 'author_update' author.pk %}" class="button">Edit</a>
 <form action="{% url 'author_delete' author.pk %}" method="post">
     {% csrf_token %}
+    
     <button type="submit">Delete</button>
+
 </form>
 <a href="{% url 'author_list' %}" class="button">Back to Authors</a>
 {% endblock %}
