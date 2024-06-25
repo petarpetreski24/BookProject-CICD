@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  namespace: bookproject-cicd
+data:
+  POSTGRES_DB: BookProject

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookproject
+  namespace: bookproject-cicd
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: bookproject
+  template:
+    metadata:
+      labels:
+        app: bookproject
+    spec:
+      containers:
+        - name: bookproject
+          image: petarpetreski24/bookproject-cicd:latest
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DATABASE_URL
+              value: "postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_URL):5432/$(POSTGRES_DB)"
+          envFrom:
+            - configMapRef:
+                name: bookproject-config
+            - secretRef:
+                name: bookproject-secret

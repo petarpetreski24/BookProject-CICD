@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bookproject-config
+  namespace: bookproject-cicd
+data:
+  POSTGRES_DB: "BookProject"
+  POSTGRES_URL: postgres-service.bookproject-cicd.svc.cluster.local
