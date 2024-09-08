@@ -1,7 +1,6 @@
 # Book Project
 
-This is a web application used for Dockerization and orchestration for a Django Project.
-
+This is a Django web application used for Dockerization and orchestration.
 ## Docker
 
 To initialize the project using Docker, follow these steps:
