@@ -1,7 +1,3 @@
-Here's the translation of the README file into English:
-
----
-
 # Book Project
 
 This is a web application used for Dockerization and orchestration for a Django Project.
